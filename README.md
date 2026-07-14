@@ -126,7 +126,7 @@ Focuses on:
 
 ## Key Findings
 
-- Sales are heavily concentrated in a single product category: **Toys accounts for roughly 75% of total sales** (~23M of ~30.45M), making it by far the dominant revenue driver.
+- Sales are heavily concentrated in a single product category: **Toys account for approximately three-quarters of total sales** (~23M of ~30.45M), making it by far the dominant revenue driver.
 - Approximately **98% of orders (97.89%)** were successfully completed.
 - Roughly **90% of total orders (90.34%)** were delivered on time, based on the "Total Orders by Delivery Performance" breakdown (On Time / Late / Not Delivered).
 - Delivery performance varies significantly by state — average delivery days range from **~8.6 days (SP)** to **~28.3 days (RR)**.
@@ -140,8 +140,8 @@ A few metrics in the current dashboard show minor inconsistencies or would benef
 - **Late Delivery Rate uses a different denominator than the delivery performance chart — by design, not error.** The KPI card (7.71%) is `Late Orders / Completed Orders`, while the "Total Orders by Delivery Performance" chart (7.54%) shows the same Late Orders count as a share of *Total Orders*. Both are internally consistent (confirmed via the underlying DAX), but since the same "Late" figure yields two different percentages depending on context, it's worth adding a tooltip or footnote clarifying which denominator applies to each visual, so readers don't assume it's a data error.
 - **Delivery Performance classification logic (confirmed):** each order is flagged "Not Delivered" (blank delivered timestamp), "On Time" (delivered on/before the estimated delivery date), or "Late" (delivered after), computed at the order level via a DAX calculated column. The "On Time" / "Late" percentages on the delivery chart are therefore correctly read as a share of total orders, including the "Not Delivered" segment in the base.
 - **Average Order Value vs. Average Item Price:** both currently show the identical value (340.90). Confirmed via the data model that these are two independently calculated DAX measures — `Average Order Value = DIVIDE([Total Sales], [Total Orders], 0)` (order-level) vs. `Average Item Price = AVERAGE(df_OrderItems[price])` (item-level). The near-identical result likely reflects that most orders in this dataset contain a single item at a similar price point, rather than a calculation error.
-- **Total Customers vs. Total Orders:** both currently show 89K. The relational model shows `customer_id` as a 1:1 key between `df_Customers` and `df_Orders`, which is consistent with datasets of this type where `customer_id` is generated per order rather than per unique shopper. This is likely expected behavior rather than a miscalculation, but worth noting explicitly if a "unique customer" figure is needed for reporting.
-- **Payment type labeling:** the dashboard shows "wallet" as a payment type. If this dataset follows the common Brazilian e-commerce structure, this may map to "boleto" in the source data — worth double-checking the field mapping.
+- **Total Customers vs. Total Orders:** both currently show 89K. In this dataset, the imported model results in a one-to-one relationship between df_Customers and df_Orders, leading both Total Customers and Total Orders to equal approximately 89K. This behavior is consistent with datasets where a customer identifier represents an order-specific customer record rather than a long-term unique shopper.
+- **Payment type labeling:** The payment labels displayed in this dashboard reflect the imported dataset. If the source data originated from the commonly used Brazilian Olist dataset, readers may wish to verify whether the imported "wallet" label corresponds to another payment category (for example, "boleto") after preprocessing.
 
 ## Business Recommendations
 
